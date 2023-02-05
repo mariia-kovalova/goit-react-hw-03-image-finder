@@ -7,13 +7,6 @@ import { toast } from 'react-toastify';
 import { End, GalleryList } from './ImageGallery.styled';
 import { Button } from 'components/Button';
 
-const INITIAL_VALUES = {
-  items: [],
-  error: null,
-  status: 'idle',
-  total: 0,
-};
-
 export class ImageGallery extends Component {
   static defaultProps = {
     query: '',
@@ -26,7 +19,13 @@ export class ImageGallery extends Component {
     onSelect: PropTypes.func.isRequired,
   };
 
-  state = { page: this.props.page, ...INITIAL_VALUES };
+  state = {
+    page: this.props.page,
+    items: [],
+    error: null,
+    status: 'idle',
+    total: 0,
+  };
 
   async componentDidUpdate(prevProps, prevState) {
     const prevPage = prevState.page;
@@ -35,7 +34,7 @@ export class ImageGallery extends Component {
     const nextQuery = this.props.query;
 
     if (prevQuery !== nextQuery) {
-      this.setState({ ...INITIAL_VALUES, status: 'pending' });
+      this.setState({ items: [], status: 'pending' });
       try {
         const { hits: items, totalHits: total } = await getPhotos(
           nextQuery,
