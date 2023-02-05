@@ -48,8 +48,9 @@ export class App extends Component {
         query,
         page
       );
-      this.setState(({ items }) => ({
+      this.setState(({ items, page }) => ({
         items: [...items, ...moreItems],
+        page: page + 1,
         total,
       }));
 
@@ -86,7 +87,6 @@ export class App extends Component {
   };
 
   loadMore = () => {
-    this.setState(({ page }) => ({ page: page + 1 }));
     this.getItems();
   };
 
