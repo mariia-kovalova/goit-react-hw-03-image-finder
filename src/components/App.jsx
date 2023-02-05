@@ -21,35 +21,12 @@ export class App extends Component {
     url: '',
   };
 
-  async componentDidUpdate(_, prevState) {
-    const { query: prevQuery, page: prevPage } = prevState;
-    const { query: nextQuery, page: nextPage } = this.state;
+  componentDidUpdate(_, prevState) {
+    const prevQuery = prevState.query;
+    const nextQuery = this.state.query;
 
-    if (prevQuery !== nextQuery || prevPage !== nextPage) {
-      this.setState({ loading: true });
-      try {
-        const { hits: moreItems, totalHits: total } = await getPhotos(
-          nextQuery,
-          nextPage
-        );
-        this.setState(({ items }) => ({
-          items: [...items, ...moreItems],
-          total,
-        }));
-
-        if (total === 0) {
-          this.notify(nextQuery);
-        }
-
-        if (nextPage !== 1) {
-          this.scroll();
-        }
-      } catch (error) {
-        this.setState({ error });
-        this.errorInfo(error.message);
-      } finally {
-        this.setState({ loading: false });
-      }
+    if (prevQuery !== nextQuery) {
+      this.getItems();
     }
   }
 
@@ -61,6 +38,33 @@ export class App extends Component {
       items: [],
       error: null,
     });
+  };
+
+  getItems = async () => {
+    const { query, page } = this.state;
+    this.setState({ loading: true });
+    try {
+      const { hits: moreItems, totalHits: total } = await getPhotos(
+        query,
+        page
+      );
+      this.setState(({ items }) => ({
+        items: [...items, ...moreItems],
+        total,
+      }));
+
+      if (total === 0) {
+        this.notify(query);
+      }
+
+      if (page !== 1) {
+      }
+    } catch (error) {
+      this.setState({ error });
+      this.errorInfo(error.message);
+    } finally {
+      this.setState({ loading: false });
+    }
   };
 
   closeModal = () => {
@@ -83,6 +87,7 @@ export class App extends Component {
 
   loadMore = () => {
     this.setState(({ page }) => ({ page: page + 1 }));
+    this.getItems();
   };
 
   scroll = () => {
