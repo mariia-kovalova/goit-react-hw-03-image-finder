@@ -95,18 +95,14 @@ export class ImageGallery extends Component {
   render() {
     const { onSelect } = this.props;
     const { items, status } = this.state;
-    const idle = status === 'idle';
-    const pending = status === 'pending';
-    const rejected = status === 'rejected';
-    const resolved = items.length > 0 || status === 'resolved';
-    const needToShowLoadMore = resolved && this.hasMorePhotos();
-    const end = resolved && !this.hasMorePhotos();
+    const more = this.hasMorePhotos();
+    const end = !this.hasMorePhotos();
 
-    if (idle) return <></>;
-    if (rejected) return <div>Error</div>;
-    return (
-      <>
-        {resolved && (
+    if (status === 'idle') return <></>;
+    if (status === 'rejected') return <div>Error</div>;
+    if (items.length > 0 || status === 'resolved') {
+      return (
+        <>
           <GalleryList>
             {items.map(({ id, webformatURL, largeImageURL, tags }) => (
               <ImageGalleryItem
@@ -118,15 +114,15 @@ export class ImageGallery extends Component {
               />
             ))}
           </GalleryList>
-        )}
-        {pending && <Loader />}
-        {needToShowLoadMore && (
-          <Button onClick={this.loadMore} type="button">
-            Load more
-          </Button>
-        )}
-        {end && <End>End of content</End>}
-      </>
-    );
+          {status === 'pending' && <Loader />}
+          {more && (
+            <Button onClick={this.loadMore} type="button">
+              Load more
+            </Button>
+          )}
+          {end && <End>End of content</End>}
+        </>
+      );
+    }
   }
 }
