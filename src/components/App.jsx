@@ -57,15 +57,16 @@ export class App extends Component {
       if (total === 0) {
         this.notify(query);
       }
-
-      if (page !== 1) {
-        this.scroll();
-      }
     } catch (error) {
       this.setState({ error });
       this.errorInfo(error.message);
     } finally {
-      setTimeout(() => this.setState({ isLoading: false }), 500);
+      setTimeout(() => {
+        this.setState({ isLoading: false });
+        if (page !== 1) {
+          this.scroll();
+        }
+      }, 500);
     }
   };
 
