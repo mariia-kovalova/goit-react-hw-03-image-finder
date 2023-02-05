@@ -59,6 +59,7 @@ export class App extends Component {
       }
 
       if (page !== 1) {
+        this.scroll();
       }
     } catch (error) {
       this.setState({ error });
