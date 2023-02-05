@@ -6,3 +6,7 @@ export const Container = styled.div`
   grid-gap: 16px;
   padding-bottom: 24px;
 `;
+
+export const End = styled.p`
+  text-align: center;
+`;

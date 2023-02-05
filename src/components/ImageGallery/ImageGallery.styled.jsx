@@ -12,7 +12,3 @@ export const GalleryList = styled.ul`
   margin-left: auto;
   margin-right: auto;
 `;
-
-export const End = styled.p`
-  text-align: center;
-`;
