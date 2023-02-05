@@ -66,7 +66,7 @@ export class App extends Component {
         if (page !== 1) {
           this.scroll();
         }
-      }, 500);
+      }, 300);
     }
   };
 
