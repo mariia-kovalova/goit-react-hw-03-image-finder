@@ -42,7 +42,7 @@ export class App extends Component {
 
   getItems = async () => {
     const { query, page } = this.state;
-    this.setState({ loading: true });
+    this.setState({ isLoading: true });
     try {
       const { hits: moreItems, totalHits: total } = await getPhotos(
         query,
@@ -63,7 +63,7 @@ export class App extends Component {
       this.setState({ error });
       this.errorInfo(error.message);
     } finally {
-      this.setState({ loading: false });
+      setTimeout(() => this.setState({ isLoading: false }), 500);
     }
   };
 
@@ -98,7 +98,7 @@ export class App extends Component {
   };
 
   render() {
-    const { isLoading, page, total, items, error, url } = this.state;
+    const { page, total, items, isLoading, error, url } = this.state;
     const showGallery = items.length > 0;
     const showLoadMore = page < Math.ceil(total / 12) && items.length > 0;
     const end = !(page < Math.ceil(total / 12)) && items.length > 0;
