@@ -22,10 +22,10 @@ export class App extends Component {
   };
 
   componentDidUpdate(_, prevState) {
-    const prevQuery = prevState.query;
-    const nextQuery = this.state.query;
+    const { query: prevQuery, page: prevPage } = prevState;
+    const { query: nextQuery, page: nextPage } = this.state;
 
-    if (prevQuery !== nextQuery) {
+    if (prevQuery !== nextQuery || prevPage !== nextPage) {
       this.getItems();
     }
   }
@@ -50,7 +50,6 @@ export class App extends Component {
       );
       this.setState(({ items, page }) => ({
         items: [...items, ...moreItems],
-        page: page + 1,
         total,
       }));
 
@@ -61,12 +60,10 @@ export class App extends Component {
       this.setState({ error });
       this.errorInfo(error.message);
     } finally {
-      setTimeout(() => {
-        this.setState({ isLoading: false });
-        if (page !== 1) {
-          this.scroll();
-        }
-      }, 300);
+      this.setState({ isLoading: false });
+      if (page !== 1) {
+        this.scroll();
+      }
     }
   };
 
@@ -89,7 +86,7 @@ export class App extends Component {
   };
 
   loadMore = () => {
-    this.getItems();
+    this.setState(({ page }) => ({ page: page + 1 }));
   };
 
   scroll = () => {
@@ -102,7 +99,7 @@ export class App extends Component {
   render() {
     const { page, total, items, isLoading, error, url } = this.state;
     const showGallery = items.length > 0;
-    const showLoadMore = page < Math.ceil(total / 12) && items.length > 0;
+    const showLoadMore = page < Math.ceil(total / 12);
     const end = !(page < Math.ceil(total / 12)) && items.length > 0;
     const showModal = url.length > 0;
 
