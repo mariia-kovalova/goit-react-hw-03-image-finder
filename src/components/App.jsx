@@ -48,7 +48,7 @@ export class App extends Component {
         query,
         page
       );
-      this.setState(({ items, page }) => ({
+      this.setState(({ items }) => ({
         items: [...items, ...moreItems],
         total,
       }));
