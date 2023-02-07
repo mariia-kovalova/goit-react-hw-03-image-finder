@@ -4,7 +4,7 @@ import { GalleryList } from './ImageGallery.styled';
 
 export const ImageGallery = ({ items, onSelect }) => {
   return (
-    <GalleryList>
+    <GalleryList className="gallery">
       {items.map(({ id, webformatURL, largeImageURL, tags }) => (
         <ImageGalleryItem
           key={id}
