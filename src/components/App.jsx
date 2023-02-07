@@ -60,10 +60,11 @@ export class App extends Component {
       this.setState({ error });
       this.errorInfo(error.message);
     } finally {
-      this.setState({ isLoading: false });
-      if (page !== 1) {
-        this.scroll();
-      }
+      this.setState({ isLoading: false }, () => {
+        if (page !== 1) {
+          this.scroll();
+        }
+      });
     }
   };
 
@@ -98,11 +99,15 @@ export class App extends Component {
       top: cardHeight * 2,
       behavior: 'smooth',
     });
+
+    //  window.scrollTo({
+    //    top: document.documentElement.scrollHeight,
+    //    behavior: 'smooth',
+    //  });
   };
 
   render() {
     const { page, total, items, isLoading, error, url } = this.state;
-    const showGallery = items.length > 0;
     const showLoadMore = page < Math.ceil(total / 12);
     const end = !(page < Math.ceil(total / 12)) && items.length > 0;
     const showModal = url.length > 0;
@@ -111,9 +116,8 @@ export class App extends Component {
       <>
         <Container>
           <Searchbar onSubmit={this.handleSubmit} />
-          {showGallery && (
-            <ImageGallery items={items} onSelect={this.selectImg} />
-          )}
+
+          <ImageGallery items={items} onSelect={this.selectImg} />
           {isLoading && <Loader />}
           {showLoadMore && (
             <Button onClick={this.loadMore} type="button">

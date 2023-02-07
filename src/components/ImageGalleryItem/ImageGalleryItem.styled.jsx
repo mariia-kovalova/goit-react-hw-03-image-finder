@@ -8,7 +8,7 @@ export const Item = styled.li`
 
 export const Img = styled.img`
   width: 100%;
-  height: 195px;
+  height: 260px;
   object-fit: cover;
   transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
